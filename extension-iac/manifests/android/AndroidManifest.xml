@@ -15,6 +15,7 @@
                <category android:name="android.intent.category.DEFAULT" />
                <category android:name="android.intent.category.BROWSABLE" />
                <data android:scheme="{{android.package}}" />
+               <data android:scheme="{{iac.scheme}}" android:host="{{iac.host}}" /> 
             </intent-filter>
         </activity>
 
