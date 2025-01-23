@@ -64,6 +64,21 @@ static void DestroyQueue()
     return YES;
 }
 
+-(BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray * _Nullable))restorationHandler{
+    if ([userActivity.activityType isEqualToString: NSUserActivityTypeBrowsingWeb]) {
+        NSURL *url = userActivity.webpageURL;
+        const char* origin = 0;
+        const char* payload = [[url absoluteString] UTF8String];
+        
+        IACCommand cmd;
+        cmd.m_Command = IAC_INVOKE;
+        cmd.m_Payload = strdup(payload);
+        cmd.m_Origin = origin ? strdup(origin) : 0;
+        IAC_Queue_Push(&g_IAC.m_CmdQueue, &cmd);
+    }
+
+    return YES;
+}
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Handle invocations launching the app.
