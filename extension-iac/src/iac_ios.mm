@@ -75,9 +75,11 @@ static void DestroyQueue()
         cmd.m_Payload = strdup(payload);
         cmd.m_Origin = origin ? strdup(origin) : 0;
         IAC_Queue_Push(&g_IAC.m_CmdQueue, &cmd);
+
+        return YES;
     }
 
-    return YES;
+    return NO;
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
@@ -102,10 +104,11 @@ static void DestroyQueue()
     {
         CreateQueue(); // Create the queue if needed
         IAC_Queue_Push(&g_IAC.m_CmdQueue, &cmd);
+        return YES;
     }
 
     // Return YES prevents OpenURL from being called, we need to do this as other extensions might and therefore internally handle OpenURL also being called.
-    return YES;
+    return NO;
 }
 
 @end
