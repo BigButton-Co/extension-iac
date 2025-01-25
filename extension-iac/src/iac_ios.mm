@@ -126,6 +126,8 @@ static void DestroyQueue()
         UIOpenURLContext *urlContext = options.URLContexts.anyObject;
         if (urlContext) {
             NSURL *url = urlContext.URL;
+            const char* origin = 0;
+            const char* payload = [[url absoluteString] UTF8String];
             // NSLog(@"Universal Link (App not started): %@", url.absoluteString);
             IACCommand cmd;
             cmd.m_Command = IAC_INVOKE;
