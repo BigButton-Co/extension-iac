@@ -121,11 +121,11 @@ static void DestroyQueue()
     {
         CreateQueue(); // Create the queue if needed
         IAC_Queue_Push(&g_IAC.m_CmdQueue, &cmd);
-        return YES;
+        // return YES;
     }
 
     // Return YES prevents OpenURL from being called, we need to do this as other extensions might and therefore internally handle OpenURL also being called.
-    return NO;
+    return YES;
 }
 
 // Handle Universal Links when app is not started and a scene configuration is created
