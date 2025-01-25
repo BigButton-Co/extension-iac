@@ -88,29 +88,29 @@ static void DestroyQueue()
 }
 
 - (BOOL)application:(UIApplication *)application 
-    willFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Handle invocations launching the app.
-    // willFinishLaunchingWithOptions is called prior to any scripts so we are garuanteed to have this information at any time set_listener is called!
+    // -------- willFinishLaunchingWithOptions is called prior to any scripts so we are garuanteed to have this information at any time set_listener is called!
     const char* origin = 0;
     const char* payload = 0;
 
     // Check if the app was launched via a Universal Link
-    NSDictionary *userActivityDictionary = launchOptions[UIApplicationLaunchOptionsUserActivityDictionaryKey];
-    if (userActivityDictionary) {
-        NSUserActivity *userActivity = userActivityDictionary.allValues.firstObject;
-        if ([userActivity.activityType isEqualToString:NSUserActivityTypeBrowsingWeb]) {
-            NSURL *url = userActivity.webpageURL;
-            // NSLog(@"Universal Link (App not started): %@", url.absoluteString);
-           payload = [[url absoluteString] UTF8String];
-        }
-    }
+    // NSDictionary *userActivityDictionary = launchOptions[UIApplicationLaunchOptionsUserActivityDictionaryKey];
+    // if (userActivityDictionary) {
+    //     NSUserActivity *userActivity = userActivityDictionary.allValues.firstObject;
+    //     if ([userActivity.activityType isEqualToString:NSUserActivityTypeBrowsingWeb]) {
+    //         NSURL *url = userActivity.webpageURL;
+    //         // NSLog(@"Universal Link (App not started): %@", url.absoluteString);
+    //        payload = [[url absoluteString] UTF8String];
+    //     }
+    // }
 
-    // if (launchOptions[UIApplicationLaunchOptionsSourceApplicationKey]) {
-    //     origin = [[launchOptions valueForKey:UIApplicationLaunchOptionsSourceApplicationKey] UTF8String];
-    // }
-    // if (launchOptions[UIApplicationLaunchOptionsURLKey]) {
-    //     payload = [[[launchOptions valueForKey:UIApplicationLaunchOptionsURLKey] absoluteString] UTF8String];
-    // }
+    if (launchOptions[UIApplicationLaunchOptionsSourceApplicationKey]) {
+        origin = [[launchOptions valueForKey:UIApplicationLaunchOptionsSourceApplicationKey] UTF8String];
+    }
+    if (launchOptions[UIApplicationLaunchOptionsURLKey]) {
+        payload = [[[launchOptions valueForKey:UIApplicationLaunchOptionsURLKey] absoluteString] UTF8String];
+    }
 
     IACCommand cmd;
     cmd.m_Command = IAC_INVOKE;
