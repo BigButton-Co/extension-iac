@@ -101,7 +101,7 @@ static void DestroyQueue()
         if ([userActivity.activityType isEqualToString:NSUserActivityTypeBrowsingWeb]) {
             NSURL *url = userActivity.webpageURL;
             // NSLog(@"Universal Link (App not started): %@", url.absoluteString);
-           payload = [[url absoluteString] UTF8String]
+           payload = [[url absoluteString] UTF8String];
         }
     }
 
