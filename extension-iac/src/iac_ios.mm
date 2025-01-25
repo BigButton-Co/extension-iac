@@ -7,7 +7,6 @@
 #import <UIKit/UIKit.h>
 #include <stdlib.h>
 
-
 struct IAC
 {
     IAC()
@@ -46,13 +45,16 @@ static void DestroyQueue()
 }
 
 @interface IACAppDelegate : NSObject <UIApplicationDelegate>
-
+@property (strong, nonatomic) UIWindow *window; // Optional for older versions of iOS or apps not using SceneDelegate
 @end
 
 
 @implementation IACAppDelegate
 
--(BOOL) application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation{
+-(BOOL) application:(UIApplication *)application 
+    openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication 
+    annotation:(id)annotation{
+    
     const char* payload = [[url absoluteString] UTF8String];
     const char* origin = sourceApplication ? [sourceApplication UTF8String] : 0;
     IACCommand cmd;
@@ -64,7 +66,10 @@ static void DestroyQueue()
     return YES;
 }
 
--(BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray * _Nullable))restorationHandler{
+-(BOOL)application:(UIApplication *)application 
+    continueUserActivity:(NSUserActivity *)userActivity 
+    restorationHandler:(void (^)(NSArray * _Nullable))restorationHandler{
+    
     if ([userActivity.activityType isEqualToString: NSUserActivityTypeBrowsingWeb]) {
         NSURL *url = userActivity.webpageURL;
         const char* origin = 0;
@@ -81,35 +86,6 @@ static void DestroyQueue()
 
     return NO;
 }
-
-// - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-//     // Handle invocations launching the app.
-//     // ----------- didFinishLaunchingWithOptions is called prior to any scripts so we are garuanteed to have this information at any time set_listener is called!
-//     const char* origin = 0;
-//     const char* payload = 0;
-// 
-//     if (launchOptions[UIApplicationLaunchOptionsSourceApplicationKey]) {
-//         origin = [[launchOptions valueForKey:UIApplicationLaunchOptionsSourceApplicationKey] UTF8String];
-//     }
-//     if (launchOptions[UIApplicationLaunchOptionsURLKey]) {
-//         payload = [[[launchOptions valueForKey:UIApplicationLaunchOptionsURLKey] absoluteString] UTF8String];
-//     }
-// 
-//     IACCommand cmd;
-//     cmd.m_Command = IAC_INVOKE;
-//     cmd.m_Payload = payload ? strdup(payload) : 0;
-//     cmd.m_Origin = origin ? strdup(origin) : 0;
-// 
-//     if (payload != 0 || origin != 0)
-//     {
-//         CreateQueue(); // Create the queue if needed
-//         IAC_Queue_Push(&g_IAC.m_CmdQueue, &cmd);
-//         return YES;
-//     }
-// 
-//     // Return YES prevents OpenURL from being called, we need to do this as other extensions might and therefore internally handle OpenURL also being called.
-//     return NO;
-// }
 
 - (BOOL)application:(UIApplication *)application willFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Handle invocations launching the app.
@@ -138,6 +114,29 @@ static void DestroyQueue()
 
     // Return YES prevents OpenURL from being called, we need to do this as other extensions might and therefore internally handle OpenURL also being called.
     return NO;
+}
+
+// Handle Universal Links when app is not started and a scene configuration is created
+- (UISceneConfiguration *)application:(UIApplication *)application 
+    configurationForConnectingSceneSession:(UISceneSession *)connectingSceneSession 
+    options:(UISceneConnectionOptions *)options {
+    
+    // Check if a URL context is present in the options
+    if (options.URLContexts) {
+        UIOpenURLContext *urlContext = options.URLContexts.anyObject;
+        if (urlContext) {
+            NSURL *url = urlContext.URL;
+            // NSLog(@"Universal Link (App not started): %@", url.absoluteString);
+            IACCommand cmd;
+            cmd.m_Command = IAC_INVOKE;
+            cmd.m_Payload = strdup(payload);
+            cmd.m_Origin = origin ? strdup(origin) : 0;
+            IAC_Queue_Push(&g_IAC.m_CmdQueue, &cmd);
+        }
+    }
+    // Return default scene configuration
+    return [[UISceneConfiguration alloc] initWithName:@"Default Configuration" 
+                                             sessionRole:connectingSceneSession.role];
 }
 
 @end
