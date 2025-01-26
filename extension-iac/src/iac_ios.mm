@@ -92,7 +92,7 @@ static void DestroyQueue()
     // Handle invocations launching the app.
     // -------- willFinishLaunchingWithOptions is called prior to any scripts so we are garuanteed to have this information at any time set_listener is called!
     const char* origin = 0;
-    const char* payload = 0;
+    __block char* payload = 0;
 
     // Check if the app was launched via a Universal Link
     NSDictionary *userActivityDictionary = launchOptions[UIApplicationLaunchOptionsUserActivityDictionaryKey];
