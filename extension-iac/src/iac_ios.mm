@@ -92,21 +92,24 @@ static void DestroyQueue()
     // Handle invocations launching the app.
     // -------- willFinishLaunchingWithOptions is called prior to any scripts so we are garuanteed to have this information at any time set_listener is called!
     const char* origin = 0;
-    __block char* payload = 0;
+    const char* payload = 0;
 
     // Check if the app was launched via a Universal Link
     NSDictionary *userActivityDictionary = launchOptions[UIApplicationLaunchOptionsUserActivityDictionaryKey];
     if (userActivityDictionary) {
+        NSUserActivity *userActivity;
         [userActivityDictionary enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
             if ([obj isKindOfClass:[NSUserActivity class]]) {
                 // NSLog(@"found NSUserActivity object!");
-                NSUserActivity *userActivity = obj;
-                if ([userActivity.activityType isEqualToString:NSUserActivityTypeBrowsingWeb]) {
-                    NSURL *url = userActivity.webpageURL;
-                    payload = [[url absoluteString] UTF8String];
-                }
+                userActivity = obj;
             }
         }];
+        if (userActivity) {
+            if ([userActivity.activityType isEqualToString:NSUserActivityTypeBrowsingWeb]) {
+                NSURL *url = userActivity.webpageURL;
+                payload = [[url absoluteString] UTF8String];
+            }
+        }
         // NSUserActivity *userActivity = userActivityDictionary.allValues.firstObject;
         // if ([userActivity.activityType isEqualToString:NSUserActivityTypeBrowsingWeb]) {
         //     NSURL *url = userActivity.webpageURL;
