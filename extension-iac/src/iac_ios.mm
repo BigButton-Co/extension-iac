@@ -97,11 +97,11 @@ static void DestroyQueue()
     // Check if the app was launched via a Universal Link
     NSDictionary *userActivityDictionary = launchOptions[UIApplicationLaunchOptionsUserActivityDictionaryKey];
     if (userActivityDictionary) {
-        NSUserActivity *userActivity;
+        __block NSUserActivity *userActivity;
         [userActivityDictionary enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
             if ([obj isKindOfClass:[NSUserActivity class]]) {
                 // NSLog(@"found NSUserActivity object!");
-                userActivity = obj;
+                userActivity = (NSUserActivity *)obj;
             }
         }];
         if (userActivity) {
