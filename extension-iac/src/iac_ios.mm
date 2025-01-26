@@ -100,8 +100,11 @@ static void DestroyQueue()
         [userActivityDictionary enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
             if ([obj isKindOfClass:[NSUserActivity class]]) {
                 // NSLog(@"found NSUserActivity object!");
-                NSURL *url = obj.webpageURL;
-                payload = [[url absoluteString] UTF8String];
+                NSUserActivity *userActivity = obj;
+                if ([userActivity.activityType isEqualToString:NSUserActivityTypeBrowsingWeb]) {
+                    NSURL *url = userActivity.webpageURL;
+                    payload = [[url absoluteString] UTF8String];
+                }
             }
         }];
         // NSUserActivity *userActivity = userActivityDictionary.allValues.firstObject;
