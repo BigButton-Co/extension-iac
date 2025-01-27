@@ -9,14 +9,20 @@
             android:launchMode="singleTask"
             android:exported="true"
             android:configChanges="keyboardHidden|orientation|screenSize">
-            <intent-filter android:autoVerify="true">
+            <intent-filter android:autoVerify="true" android:label="@string/filter_deep_link">
                <action android:name="android.intent.action.VIEW" />
                <category android:name="android.intent.category.DEFAULT" />
                <category android:name="android.intent.category.BROWSABLE" />
-               <!-- <data android:scheme="{{android.package}}" /> -->
+               <!-- FOR DEEP LONKING -->
                <data android:scheme="{{iac.scheme}}" android:host="{{iac.host}}" /> 
             </intent-filter>
+            <intent-filter android:label="@string/filter_android_package">
+               <action android:name="android.intent.action.VIEW" />
+               <category android:name="android.intent.category.DEFAULT" />
+               <category android:name="android.intent.category.BROWSABLE" />
+               <!-- FOR FACEBOOK /> -->
+               <data android:scheme="{{android.package}}" /> 
+            </intent-filter>
         </activity>
-
     </application>
 </manifest>
