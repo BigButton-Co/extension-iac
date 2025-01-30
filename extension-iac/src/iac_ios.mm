@@ -142,29 +142,29 @@ static void DestroyQueue()
 }
 
 // Handle Universal Links when app is not started and a scene configuration is created
-- (UISceneConfiguration *)application:(UIApplication *)application 
-    configurationForConnectingSceneSession:(UISceneSession *)connectingSceneSession 
-    options:(UISceneConnectionOptions *)options {
+// - (UISceneConfiguration *)application:(UIApplication *)application 
+//     configurationForConnectingSceneSession:(UISceneSession *)connectingSceneSession 
+//     options:(UISceneConnectionOptions *)options {
     
-    // Check if a URL context is present in the options
-    if (options.URLContexts) {
-        UIOpenURLContext *urlContext = options.URLContexts.anyObject;
-        if (urlContext) {
-            NSURL *url = urlContext.URL;
-            const char* origin = 0;
-            const char* payload = [[url absoluteString] UTF8String];
-            // NSLog(@"Universal Link (App not started): %@", url.absoluteString);
-            IACCommand cmd;
-            cmd.m_Command = IAC_INVOKE;
-            cmd.m_Payload = strdup(payload);
-            cmd.m_Origin = origin ? strdup(origin) : 0;
-            IAC_Queue_Push(&g_IAC.m_CmdQueue, &cmd);
-        }
-    }
-    // Return default scene configuration
-    return [[UISceneConfiguration alloc] initWithName:@"Default Configuration" 
-                                             sessionRole:connectingSceneSession.role];
-}
+//     // Check if a URL context is present in the options
+//     if (options.URLContexts) {
+//         UIOpenURLContext *urlContext = options.URLContexts.anyObject;
+//         if (urlContext) {
+//             NSURL *url = urlContext.URL;
+//             const char* origin = 0;
+//             const char* payload = [[url absoluteString] UTF8String];
+//             // NSLog(@"Universal Link (App not started): %@", url.absoluteString);
+//             IACCommand cmd;
+//             cmd.m_Command = IAC_INVOKE;
+//             cmd.m_Payload = strdup(payload);
+//             cmd.m_Origin = origin ? strdup(origin) : 0;
+//             IAC_Queue_Push(&g_IAC.m_CmdQueue, &cmd);
+//         }
+//     }
+//     // Return default scene configuration
+//     return [[UISceneConfiguration alloc] initWithName:@"Default Configuration" 
+//                                              sessionRole:connectingSceneSession.role];
+// }
 
 @end
 
