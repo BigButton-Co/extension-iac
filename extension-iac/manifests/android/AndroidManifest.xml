@@ -16,13 +16,13 @@
                <!-- FOR DEEP LONKING -->
                <data android:scheme="{{iac.scheme}}" android:host="{{iac.host}}" /> 
             </intent-filter>
-            <intent-filter>
-               <action android:name="android.intent.action.VIEW" />
-               <category android:name="android.intent.category.DEFAULT" />
-               <category android:name="android.intent.category.BROWSABLE" />
-               <!-- FOR FACEBOOK /> -->
-               <data android:scheme="{{android.package}}" /> 
-            </intent-filter>
+                <!-- FOR FACEBOOK -->
+                <!-- <intent-filter>
+                    <action android:name="android.intent.action.VIEW" />
+                    <category android:name="android.intent.category.DEFAULT" />
+                    <category android:name="android.intent.category.BROWSABLE" />
+                    <data android:scheme="{{android.package}}" /> 
+                </intent-filter> -->
         </activity>
     </application>
 </manifest>
